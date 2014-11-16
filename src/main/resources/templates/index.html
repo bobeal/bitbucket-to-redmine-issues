@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Bitbucket to Redmine issues importer</title>
+    <meta name="description" content="" />
+    <meta name="author" content="bobeal" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="css/normalize.min.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+<body>
+    <div th:if="${error}" class="error" th:text="${error}">Error</div>
+    <form action="/upload-issues" method="POST" enctype="multipart/form-data">
+        <fieldset>
+            <label for="issuesFile">Bitbucket issues file</label>
+            <input type="file" name="issuesFile" />
+            <input type="submit" value="Upload" />
+        </fieldset>
+    </form>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/plugins.js"></script>
+</body>
+</html>
