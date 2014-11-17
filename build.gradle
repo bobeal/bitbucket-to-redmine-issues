@@ -47,3 +47,5 @@ eclipse {
 task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
 }
+
+applicationDefaultJvmArgs = ["-Dspring.config.location=classpath:/application.properties,classpath:/override.properties"]
