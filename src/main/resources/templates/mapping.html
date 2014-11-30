@@ -19,12 +19,36 @@
 <body>
     <form action="/mapping" method="POST">
         <fieldset>
+            <legend>Map your bitbucket users to Redmine ones</legend>
             <div th:each="bitbucketUser : ${bitbucketUsers}">
-                <label th:attr="for=${bitbucketUser}" th:text="${bitbucketUser}">Bitbucket User</label>
-                <select th:attr="name=${bitbucketUser}">
-                    <option th:each="redmineUser : ${redmineUsers}" th:attr="value=${redmineUser}" th:text="${redmineUser}">Redmine User</option>
+                <label th:for="${bitbucketUser}" th:text="${bitbucketUser}">Bitbucket User</label>
+                <select th:name="'user-'+${bitbucketUser}">
+                    <option th:each="redmineUser : ${redmineUsers}" th:value="${redmineUser.key}" th:text="${redmineUser.value}"
+                        th:selected="${redmineUser.value == bitbucketUser}">
+                        Redmine User
+                    </option>
                 </select>
             </div>
+        </fieldset>
+        <fieldset>
+            <legend>Map your bitbucket issues status to Redmine ones</legend>
+            <div th:each="bitbucketIssueStatus : ${bitbucketIssuesStatuses}">
+                <label th:for="${bitbucketIssueStatus}" th:text="${bitbucketIssueStatus}">Bitbucket User</label>
+                <select th:name="'status-'+${bitbucketIssueStatus}">
+                    <option th:each="redmineIssueStatus : ${redmineIssuesStatuses}" th:value="${redmineIssueStatus.key}" 
+                        th:text="${redmineIssueStatus.value}" th:selected="${redmineIssueStatus.value == bitbucketIssueStatus}">
+                        Redmine Issue Status
+                    </option>
+                </select>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Map your bitbucket issues kind to Redmine ones</legend>
+        
+        </fieldset>
+        <fieldset>
+            <legend>Map your bitbucket issues priority to Redmine ones</legend>
+        
         </fieldset>
         <input type="submit" value="Next" />
     </form>

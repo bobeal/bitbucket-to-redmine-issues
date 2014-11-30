@@ -1,5 +1,11 @@
 package importer.controller;
 
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +19,8 @@ import importer.service.RedmineService;
 
 @Controller
 public class Importer {
+
+    private Log log = LogFactory.getLog(Importer.class);
 
     @Autowired
     private BitbucketService bitbucketService;
@@ -44,11 +52,29 @@ public class Importer {
     @RequestMapping(value = "/mapping", method = RequestMethod.GET)
     public String mapping(Model model) {
         model.addAttribute("bitbucketUsers", bitbucketService.listUsers());
+        model.addAttribute("bitbucketIssuesStatuses", bitbucketService.listIssuesStatuses());
         try {
             model.addAttribute("redmineUsers", redmineService.listUsers());
+            model.addAttribute("redmineIssuesStatuses", redmineService.listIssuesStatuses());
         } catch (Exception e) {
             model.addAttribute("error", "Error retrieving data from Redmine");
         }
         return "mapping";
+    }
+
+    @RequestMapping(value = "/mapping", method = RequestMethod.POST)
+    public String handleMapping(@RequestParam Map<String, String> params) {
+        log.info("Received body : " + params);
+        Map<String, String> userMappings = parseParam(params, "user-");
+        Map<String, String> statusMappings = parseParam(params, "status-");
+        return "mapping";
+    }
+
+    private Map<String, String> parseParam(Map<String, String> params, String prefix) {
+        return params.keySet().stream()
+                .filter(param -> param.startsWith(prefix))
+                .collect(Collectors.toMap(new Function<String, String>() {
+                    public String apply(String input) { return input.replaceFirst(prefix, ""); }
+                }, param -> params.get(param)));
     }
 }

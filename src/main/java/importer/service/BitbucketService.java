@@ -1,7 +1,7 @@
 package importer.service;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,7 +39,11 @@ public class BitbucketService {
         log.debug(versions);
     }
 
-    public List<String> listUsers() {
-        return users.toSortedList();
+    public Set<String> listIssuesStatuses() {
+        return UnifiedSet.newSetWith("new", "open", "resolved", "on hold", "invalid", "duplicate", "wontfix");
+    }
+
+    public Set<String> listUsers() {
+        return users.toSortedSet();
     }
 }

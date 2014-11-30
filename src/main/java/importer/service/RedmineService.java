@@ -2,7 +2,9 @@ package importer.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,8 +52,17 @@ public class RedmineService {
     @Value("${redmine.baseUrl}")
     private String baseUrl;
 
-    public List<String> listUsers() throws JsonProcessingException, IOException {
+    public Map<String, String> listUsers() throws JsonProcessingException, IOException {
         JsonNode result = restTemplate().getForObject(baseUrl + "/users.json", JsonNode.class);
-        return result.findValue("users").findValuesAsText("login");
+        Map<String, String> users = new HashMap<String, String>();
+        result.findValue("users").forEach(user -> users.put(user.get("id").asText(), user.get("login").asText()));
+        return users;
+    }
+
+    public Map<String, String> listIssuesStatuses() throws JsonProcessingException, IOException {
+        JsonNode result = restTemplate().getForObject(baseUrl + "/issue_statuses.json", JsonNode.class);
+        Map<String, String> issuesStatuses = new HashMap<String, String>();
+        result.findValue("issue_statuses").forEach(status -> issuesStatuses.put(status.get("id").asText(), status.get("name").asText()));
+        return issuesStatuses;
     }
 }
